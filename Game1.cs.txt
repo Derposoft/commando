@@ -1,0 +1,313 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.GamerServices;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
+
+namespace Commando
+{
+    public class Game1 : Microsoft.Xna.Framework.Game
+    {
+        GraphicsDeviceManager graphics;
+        SpriteBatch spriteBatch;
+
+        public Player player;
+        public List<Enemy> enemies = new List<Enemy>();
+        public List<Rectangle> spawnPointRects = new List<Rectangle>();
+        public Color backColor = Color.SpringGreen;
+        public SpriteFont spriteFont;
+        public SpriteFont spriteFont2;
+        public int money = 0;
+        int timer = 0;
+        int btimer = 200;
+        int htimer = 0;
+        int score = 0;
+        public int gameTime = 0;
+        public int hiScore = 0;
+        public bool startDone = false;
+
+        MouseState oldState = Mouse.GetState();
+        Texture2D crossHairs;
+        StartInterface startInterface;
+
+        Random xRandom = new Random();
+        Random yRandom = new Random();
+        Random theRandom = new Random();
+
+        Vector2 newSpawnPoint;
+
+
+        public Game1()
+        {
+            graphics = new GraphicsDeviceManager(this);
+            Content.RootDirectory = "Content";
+        }
+
+        protected override void Initialize()
+        {
+            base.Initialize();
+        }
+
+        protected override void LoadContent()
+        {
+            spriteBatch = new SpriteBatch(GraphicsDevice);
+
+            player = new Player(Content.Load<Texture2D>("commandoPlayer"), this);
+            crossHairs = Content.Load<Texture2D>("CrossHairs");
+
+            spriteFont = Content.Load<SpriteFont>("SpriteFont1");
+            spriteFont2 = Content.Load<SpriteFont>("SpriteFont2");
+
+            startInterface = new StartInterface(this);
+
+            //graphics.ToggleFullScreen();
+
+            spawnEnemy(new Vector2(20, 30));
+        }
+
+        protected override void UnloadContent()
+        {
+        }
+
+        protected override void Update(GameTime gameTime)
+        {
+            if (Keyboard.GetState().IsKeyDown(Keys.Escape))
+                graphics.ToggleFullScreen();
+
+            timer += 1;
+
+            this.gameTime = (int)gameTime.TotalGameTime.TotalSeconds;
+
+            if (!startDone)
+            {
+                startInterface.Update();
+                this.startDone = startInterface.startDone;
+                startDone = true;
+            }
+            else if (startDone)
+            {
+                if (backColor.R > 0)
+                    backColor.R--;
+                if (backColor.G > 0)
+                    backColor.G--;
+                if (backColor.B > 0)
+                    backColor.B--;
+                if (backColor.A < 255)
+                    backColor.A++;
+
+                if (htimer > 0)
+                    htimer--;
+
+                if (player.lifePoints != 0)
+                {
+                    if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
+                        this.Exit();
+
+                    if (btimer > 20)
+                        if (btimer % 500 == 0)
+                            btimer -= 5;
+
+                    if (timer % btimer == 0)
+                    {
+                        spawnEnemy(new Vector2(20, 30));
+                        if (timer > 1000)
+                            spawnBlueEnemy(new Vector2(GraphicsDevice.Viewport.Width - 80, 30));
+                        if (timer > 2000)
+                            spawnBlueEnemy(new Vector2(20, GraphicsDevice.Viewport.Height - 30));
+                        if (timer > 3000)
+                            spawnEnemy(new Vector2(GraphicsDevice.Viewport.Width - 80, GraphicsDevice.Viewport.Height - 30));
+                        //change back to 1000 later
+                        if (timer > 4000 && timer % 10 == 0)
+                        {
+                            newSpawnPoint = new Vector2(
+                                xRandom.Next(0, GraphicsDevice.Viewport.Width - 60),
+                                    yRandom.Next(0, GraphicsDevice.Viewport.Height - 60));
+
+                            if (theRandom.Next(0, 100) > 30)
+                                spawnRedEnemy(newSpawnPoint);
+                            else
+                                spawnGreenEnemy(newSpawnPoint);
+                        }
+                    }
+
+                    foreach (Enemy enemy in enemies)
+                    {
+                        enemy.UpdateEnemy(ref player);
+
+                        foreach (Bullet b in player.bullets)
+                        {
+                            if (enemy.enemyRectangle.Intersects(b.bulletRectangle))
+                            {
+                                //removes both the bullet and the enemy
+                                enemy.health--;
+                                b.isVisible = false;
+                                if (enemy.health == 0)
+                                {
+                                    enemy.isVisible = false;
+                                    if (enemy.alienColor == Color.White)
+                                        score += 10;
+                                    if (enemy.alienColor == Color.Blue)
+                                        score += 30;
+                                    if (enemy.alienColor == Color.Red)
+                                        score += 50;
+                                    if (enemy.alienColor == Color.Green)
+                                        score += 200;
+                                }
+                            }
+                        }
+                        foreach (Enemy e in enemies)
+                        {
+                            foreach (Bullet b in e.enemyBullets)
+                            {
+                                b.position += b.velocity;
+
+                                if (b.bulletRectangle.Intersects(player.playerRect))
+                                {
+                                    b.isVisible = false;
+                                    player.lifePoints -= 1;
+                                }
+                            }
+                        }
+
+                        if (enemy.enemyRectangle.Intersects(player.playerRect))
+                        {
+                            player.lifePoints -= 1;
+                            enemy.isVisible = false;
+                        }
+                    }
+
+                    for (int i = 0; i == enemies.Count; i++)
+                    {
+                        if (!enemies[i].isVisible)
+                        {
+                            enemies.RemoveAt(i);
+                            i--;
+                        }
+                    }
+
+                    player.Update(gameTime);
+                }
+            }
+
+            if (player.lifePoints == 0)
+            {
+                if (backColor.A < 250)
+                    backColor.A += 5;
+                if (backColor.R < 250)
+                    backColor.R += 5;
+                if (backColor.B > 5)
+                    backColor.B -= 5;
+                if (backColor.G > 5)
+                    backColor.G -= 5;
+
+                if (hiScore < score)
+                    hiScore = score;
+
+                foreach (Enemy enemy in enemies)
+                {
+                    //enemy.alienColor = backColor;
+                    money += score;
+                }
+
+                if (Keyboard.GetState().IsKeyDown(Keys.Enter) || Keyboard.GetState().IsKeyDown(Keys.Space))
+                {
+                    enemies = new List<Enemy>();
+                    backColor = Color.SpringGreen;
+                    spawnEnemy(new Vector2(20, 30));
+                    player.lifePoints = 10;
+                    timer = 0;
+                    btimer = 200;
+                    score = 0;
+
+                    startInterface.startDone = false;
+                    startDone = false;
+                }
+            }
+
+            base.Update(gameTime);
+        }
+
+        public void spawnEnemy(Vector2 spawnerPos)
+        {
+            Enemy enemy = new Enemy(Content.Load<Texture2D>("commandoEnemy"),
+                    Content.Load<Texture2D>("commandoEnemySpawner"), Content.Load<Texture2D>("commandoSquareBullet"), spawnerPos, Color.White);
+
+            enemies.Add(enemy);
+        }
+
+        public void spawnGreenEnemy(Vector2 spawnerPos)
+        {
+            Enemy enemy = new Enemy(Content.Load<Texture2D>("commandoEnemy"),
+                    Content.Load<Texture2D>("commandoEnemySpawner"), Content.Load<Texture2D>("commandoSquareBullet"), spawnerPos, Color.Green);
+
+            enemies.Add(enemy);
+        }
+
+        public void spawnBlueEnemy(Vector2 spawnerPos)
+        {
+            Enemy enemy = new Enemy(Content.Load<Texture2D>("commandoEnemy"),
+                    Content.Load<Texture2D>("commandoEnemySpawner"), Content.Load<Texture2D>("commandoSquareBullet"), spawnerPos, Color.Blue);
+
+            enemies.Add(enemy);
+        }
+
+        public void spawnRedEnemy(Vector2 spawnerPos)
+        {
+            Enemy enemy = new Enemy(Content.Load<Texture2D>("commandoEnemy"),
+                    Content.Load<Texture2D>("commandoEnemySpawner"), Content.Load<Texture2D>("commandoSquareBullet"), spawnerPos, Color.Red);
+
+            enemies.Add(enemy);
+        }
+
+        protected override void Draw(GameTime gameTime)
+        {
+            GraphicsDevice.Clear(backColor);
+
+            //spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
+            spriteBatch.Begin();
+
+            spriteBatch.DrawString(spriteFont2, 
+                "Score: " + score.ToString(), new Vector2(GraphicsDevice.Viewport.Width / 2 - 20, 0), Color.Red);
+
+            spriteBatch.DrawString(spriteFont2,
+                "Lives: " + player.lifePoints.ToString(), new Vector2(GraphicsDevice.Viewport.Width / 2 - 20, 15), Color.Red);
+
+            spriteBatch.Draw(crossHairs, new Vector2(
+                Mouse.GetState().X - crossHairs.Bounds.Width / 2, 
+                    Mouse.GetState().Y - crossHairs.Bounds.Height / 2), null, 
+                        Color.White, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 1);
+
+            spriteBatch.End();
+            foreach (Enemy E in enemies)
+                E.Draw(spriteBatch);
+
+            player.Draw(spriteBatch);
+
+            spriteBatch.Begin();
+
+            /*if (backColor != Color.Black && startDone)
+            {
+                spriteBatch.DrawString(spriteFont, "GAME OVER!", new Vector2(GraphicsDevice.Viewport.Width / 2 - 30,
+                    GraphicsDevice.Viewport.Height / 2), Color.Black);
+                spriteBatch.DrawString(spriteFont, "score:" + score, new Vector2(GraphicsDevice.Viewport.Width / 2 - 30,
+                     GraphicsDevice.Viewport.Height / 2 + 50), Color.Black);
+                spriteBatch.DrawString(spriteFont, "high-score:" + hiScore, new Vector2(GraphicsDevice.Viewport.Width / 2 - 30,
+                     GraphicsDevice.Viewport.Height / 2 + 100), Color.Black);
+            }*/
+	    //slightly glitchy score / gameover message drawing
+            spriteBatch.End();
+
+            if (!startDone)
+            {
+                startInterface.Draw(spriteBatch, spriteFont, GraphicsDevice, crossHairs);
+            }
+
+            base.Draw(gameTime);
+        }
+    }
+}
