@@ -74,41 +74,30 @@ namespace Commando
             }
 
             //arrow key movement code
-            if (GamePad.GetState(PlayerIndex.One).ThumbSticks.Left.Y > 0)
+            if (Keyboard.GetState().IsKeyDown(Keys.W))
             {
                 position.Y -= velocityFactor;
                 if (velocity.Y > -4.9f)
                     velocity.Y -= 0.1f;
             }
-            if (GamePad.GetState(PlayerIndex.One).ThumbSticks.Left.Y < 0)
+            if (Keyboard.GetState().IsKeyDown(Keys.S))
             {
                 position.Y += velocityFactor;
                 if (velocity.Y < 4.9)
                     velocity.Y += 0.1f;
             }
-            if (GamePad.GetState(PlayerIndex.One).ThumbSticks.Left.X < 0)
+            if (Keyboard.GetState().IsKeyDown(Keys.A))
             {
                 position.X -= velocityFactor;
                 if (velocity.X > -4.9f)
                     velocity.X -= 0.1f;
             }
-            if (GamePad.GetState(PlayerIndex.One).ThumbSticks.Left.X > 0)
+            if (Keyboard.GetState().IsKeyDown(Keys.D))
             {
                 position.X += velocityFactor;
                 if (velocity.X < 4.9)
                     velocity.X += 0.1f;
             }
-            if (GamePad.GetState(PlayerIndex.One).Buttons.A == ButtonState.Pressed)
-            {
-                if (AmazingBulletCoolDown > 0)
-                    return;
-                if (AmazingBulletCoolDown == 0)
-                {
-                    AmazingBulletCoolDown = 100;
-                    bulletType = typesOfBullets.RapidFire;
-                }
-            }
-            
             if (Keyboard.GetState().IsKeyDown(Keys.NumPad0))
             {
                 bulletType = typesOfBullets.Normal;
@@ -138,8 +127,7 @@ namespace Commando
             if (timer > 0)
                 timer--;
 
-            rotation = (float)Math.Atan2(GamePad.GetState(PlayerIndex.One).ThumbSticks.Right.X,
-                GamePad.GetState(PlayerIndex.One).ThumbSticks.Right.Y) + MathHelper.ToDegrees(90);
+            rotation = (float)Math.Atan2(distance.Y, distance.X);
 
             if (Mouse.GetState().RightButton == ButtonState.Pressed)
             {
@@ -153,8 +141,7 @@ namespace Commando
 
             //if clicked, moves. else, slows down
 
-            if (GamePad.GetState(PlayerIndex.One).ThumbSticks.Right.X > 0 || GamePad.GetState(PlayerIndex.One).ThumbSticks.Right.X < 0 ||
-                GamePad.GetState(PlayerIndex.One).ThumbSticks.Right.Y > 0 || GamePad.GetState(PlayerIndex.One).ThumbSticks.Right.Y < 0)
+            if (mouse.LeftButton == ButtonState.Pressed)
                 if (bulletTimer == 0)
                     Shoot();
 
