@@ -24,20 +24,18 @@ namespace Commando
         {
             texture = newTexture;
 
-            isVisible = false;
+            isVisible = true;
+        }
+
+        public void Update()
+        {
+            bulletRectangle.X = (int)position.X;
+            bulletRectangle.Y = (int)position.Y;
         }
 
         public void Draw(SpriteBatch SB)
         {
-            if (isVisible)
-            {
-                bulletRectangle = 
-                    new Rectangle((int)position.X, (int)position.Y, texture.Bounds.Width, texture.Bounds.Height);
-            }
-            else
-            {
-                bulletRectangle = new Rectangle(-1000, -1000, 1, 1);
-            }
+            bulletRectangle = new Rectangle((int)position.X, (int)position.Y, texture.Bounds.Width, texture.Bounds.Height);
 
             SB.Begin();
 
