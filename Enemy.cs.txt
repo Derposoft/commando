@@ -9,6 +9,8 @@ namespace Commando
 {
     public class Enemy
     {
+        Game1 game;
+
         public Texture2D spawner_texture;
         public Texture2D texture;
         public Texture2D bulletTexture;
@@ -26,7 +28,7 @@ namespace Commando
         public int health;
         int timer = 0;
 
-        public Enemy(Texture2D enemyTexture, Texture2D spawnerTexture, Texture2D BulletTexture, Vector2 spawnerPos, Color AlienColor)
+        public Enemy(Texture2D enemyTexture, Texture2D spawnerTexture, Texture2D BulletTexture, Vector2 spawnerPos, Color AlienColor, Game1 Game)
         {
             spawner_texture = spawnerTexture;
             texture = enemyTexture;
@@ -36,6 +38,8 @@ namespace Commando
             position = spawner_position;
             origin = new Vector2(texture.Bounds.Width / 2, texture.Bounds.Height / 2);
             alienColor = AlienColor;
+
+            game = Game;
 
             if (alienColor == Color.White)
             {
@@ -78,28 +82,36 @@ namespace Commando
 
             if (alienColor == Color.Green)
             {
-                if (timer % 120 == 0)
+                if (timer % 120 == 0 && enemyRectangle != new Rectangle(-1000, -1000, 1, 1))
                 {
-                    Bullet newBullet = new Bullet(bulletTexture);
+                    Bullet newBullet = new Bullet(game.Content.Load<Texture2D>("commandoBullet"));
 
-                    newBullet.position = position;
+                    newBullet.velocity = new Vector2((float)Math.Cos(rotation),
+                            (float)Math.Sin(rotation)) * -3;
+                    newBullet.position += position + newBullet.velocity * 5.0f;
 
                     Vector2 distance_2 = new Vector2();
                     distance_2.X = p.position.X - position.X;
-                    distance_2.Y = p.position.Y - position.Y;
+                    distance_2.X = p.position.Y - position.Y;
 
                     newBullet.rotation = (float)Math.Atan2(distance_2.Y, distance_2.X);
-
-                    newBullet.velocity = new Vector2((float)Math.Cos(newBullet.rotation), 
-                        (float)Math.Sin(newBullet.rotation)) / 20;
-
-                    if (enemyBullets.Count < 100)
+                    newBullet.isVisible = true;
+                    if (enemyBullets.Count < 3000)
                         enemyBullets.Add(newBullet);
+
                 }
 
                 foreach (Bullet b in enemyBullets)
                 {
                     b.rotation += MathHelper.ToRadians(5);
+                }
+                for (int i = 0; i < enemyBullets.Count; i++)
+                {
+                    if (!enemyBullets[i].isVisible)
+                    {
+                        enemyBullets.RemoveAt(i);
+                        i--;
+                    }
                 }
             }
             
@@ -117,10 +129,15 @@ namespace Commando
 
             foreach (Bullet b in enemyBullets)
             {
-                SB.Draw(bulletTexture, b.position, Color.White);
+               // if (Vector2.Distance(position, b.position) < 2000)
+                //{
+                    SB.End();
+                    b.Draw(SB);
+                    SB.Begin();
+               // }
             }
 
-            if (isVisible)
+            if (isVisible && enemyRectangle != new Rectangle(-1000, -1000, 1, 1))
             {
                 SB.Draw(texture, position, null, alienColor,
                     rotation, origin, 1.0f, SpriteEffects.None, 0);
