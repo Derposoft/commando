@@ -73,6 +73,15 @@ namespace Commando
             SB.DrawString(spriteFont, ("$" + money), MONEY_LABEL_POS, Color.Yellow);
 
             SB.End();
+
+            //draws a spaceship if an option is highlighted << this is fake ?<what was I thinking lol
+
+            if ((Mouse.GetState().X > START_GAME_LABEL_POS.X && Mouse.GetState().X < START_GAME_LABEL_POS.X + 200 &&
+                Mouse.GetState().Y > START_GAME_LABEL_POS.Y && Mouse.GetState().Y < START_GAME_LABEL_POS.Y + 40) ||
+                (Mouse.GetState().X > QUIT_GAME_LABEL_POS.X && Mouse.GetState().X < QUIT_GAME_LABEL_POS.X + 200 &&
+                Mouse.GetState().Y > QUIT_GAME_LABEL_POS.Y && Mouse.GetState().Y < QUIT_GAME_LABEL_POS.Y + 40))
+            {
+            }
         }
     }
 }
