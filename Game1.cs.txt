@@ -65,7 +65,9 @@ namespace Commando
 
             startInterface = new StartInterface(this);
 
+            Window.AllowUserResizing = true;
             //graphics.ToggleFullScreen();
+            
 
             spawnEnemy(new Vector2(20, 30));
         }
@@ -78,6 +80,8 @@ namespace Commando
         {
             if (Keyboard.GetState().IsKeyDown(Keys.Escape))
                 graphics.ToggleFullScreen();
+
+            player.Update();
 
             timer += 1;
 
@@ -121,8 +125,8 @@ namespace Commando
                             spawnBlueEnemy(new Vector2(20, GraphicsDevice.Viewport.Height - 30));
                         if (timer > 3000)
                             spawnEnemy(new Vector2(GraphicsDevice.Viewport.Width - 80, GraphicsDevice.Viewport.Height - 30));
-                        //change back to 1000 later
-                        if (timer > 4000 && timer % 10 == 0)
+                        //4000 and 10 is default
+                        if (timer > 1000 && timer % 5 == 0)
                         {
                             newSpawnPoint = new Vector2(
                                 xRandom.Next(0, GraphicsDevice.Viewport.Width - 60),
@@ -160,24 +164,27 @@ namespace Commando
                                 }
                             }
                         }
-                        foreach (Enemy e in enemies)
-                        {
-                            foreach (Bullet b in e.enemyBullets)
-                            {
-                                b.position += b.velocity;
 
-                                if (b.bulletRectangle.Intersects(player.playerRect))
-                                {
-                                    b.isVisible = false;
-                                    player.lifePoints -= 1;
-                                }
+                        foreach (Bullet b in enemy.enemyBullets)
+                        {
+                            b.position += b.velocity;
+
+                            if (player.playerRect.Intersects(b.bulletRectangle))
+                            {
+                                b.isVisible = false;
+                                player.lifePoints -= 1;
+                            }
+                            //new code
+                            if (enemy.enemyRectangle.Intersects(b.bulletRectangle))
+                            {
+                                enemy.health--;
                             }
                         }
 
                         if (enemy.enemyRectangle.Intersects(player.playerRect))
                         {
-                            player.lifePoints -= 1;
                             enemy.isVisible = false;
+                            player.lifePoints -= 1;
                         }
                     }
 
@@ -189,8 +196,6 @@ namespace Commando
                             i--;
                         }
                     }
-
-                    player.Update(gameTime);
                 }
             }
 
@@ -235,7 +240,7 @@ namespace Commando
         public void spawnEnemy(Vector2 spawnerPos)
         {
             Enemy enemy = new Enemy(Content.Load<Texture2D>("commandoEnemy"),
-                    Content.Load<Texture2D>("commandoEnemySpawner"), Content.Load<Texture2D>("commandoSquareBullet"), spawnerPos, Color.White);
+                    Content.Load<Texture2D>("commandoEnemySpawner"), Content.Load<Texture2D>("commandoSquareBullet"), spawnerPos, Color.White, this);
 
             enemies.Add(enemy);
         }
@@ -243,7 +248,7 @@ namespace Commando
         public void spawnGreenEnemy(Vector2 spawnerPos)
         {
             Enemy enemy = new Enemy(Content.Load<Texture2D>("commandoEnemy"),
-                    Content.Load<Texture2D>("commandoEnemySpawner"), Content.Load<Texture2D>("commandoSquareBullet"), spawnerPos, Color.Green);
+                    Content.Load<Texture2D>("commandoEnemySpawner"), Content.Load<Texture2D>("commandoSquareBullet"), spawnerPos, Color.Green, this);
 
             enemies.Add(enemy);
         }
@@ -251,7 +256,7 @@ namespace Commando
         public void spawnBlueEnemy(Vector2 spawnerPos)
         {
             Enemy enemy = new Enemy(Content.Load<Texture2D>("commandoEnemy"),
-                    Content.Load<Texture2D>("commandoEnemySpawner"), Content.Load<Texture2D>("commandoSquareBullet"), spawnerPos, Color.Blue);
+                    Content.Load<Texture2D>("commandoEnemySpawner"), Content.Load<Texture2D>("commandoSquareBullet"), spawnerPos, Color.Blue, this);
 
             enemies.Add(enemy);
         }
@@ -259,7 +264,7 @@ namespace Commando
         public void spawnRedEnemy(Vector2 spawnerPos)
         {
             Enemy enemy = new Enemy(Content.Load<Texture2D>("commandoEnemy"),
-                    Content.Load<Texture2D>("commandoEnemySpawner"), Content.Load<Texture2D>("commandoSquareBullet"), spawnerPos, Color.Red);
+                    Content.Load<Texture2D>("commandoEnemySpawner"), Content.Load<Texture2D>("commandoSquareBullet"), spawnerPos, Color.Red, this);
 
             enemies.Add(enemy);
         }
@@ -299,7 +304,6 @@ namespace Commando
                 spriteBatch.DrawString(spriteFont, "high-score:" + hiScore, new Vector2(GraphicsDevice.Viewport.Width / 2 - 30,
                      GraphicsDevice.Viewport.Height / 2 + 100), Color.Black);
             }*/
-	    //slightly glitchy score / gameover message drawing
             spriteBatch.End();
 
             if (!startDone)
