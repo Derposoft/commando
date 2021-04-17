@@ -1,0 +1,11 @@
+Content\commandoPlayer.xnb
+Content\CrossHairs.xnb
+Content\commandoEnemySpawner.xnb
+Content\commandoEnemy.xnb
+Content\back_ground.xnb
+Content\commandoBullet.xnb
+Content\textures\wedge_p1_diff_v1.xnb
+Content\commandoSquareBullet.xnb
+Content\SpriteFont1.xnb
+Content\SpriteFont2.xnb
+Content\shoot.xnb

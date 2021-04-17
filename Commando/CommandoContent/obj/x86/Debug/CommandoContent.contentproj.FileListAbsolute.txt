@@ -1,0 +1,4 @@
+c:\users\ckv\documents\visual studio 2010\Projects\Commando\Commando\CommandoContent\obj\x86\Debug\CommandoContent.contentprojResolveAssemblyReference.cache
+C:\Users\Viswanath\Desktop\Commando\Commando\Commando\CommandoContent\obj\x86\Debug\CommandoContent.contentprojResolveAssemblyReference.cache
+C:\Users\Viswanath\Desktop\Desktop\Commando\Commando\Commando\CommandoContent\obj\x86\Debug\CommandoContent.contentprojResolveAssemblyReference.cache
+C:\Users\Viswanath\Desktop\Desktop 7\Desktop 6\Desktop 5\Desktop 4\Desktop 3\Desktop 2\Desktop\Commando\Commando\Commando\CommandoContent\obj\x86\Debug\CommandoContent.contentprojResolveAssemblyReference.cache

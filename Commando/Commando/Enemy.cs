@@ -1,0 +1,149 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+
+namespace Commando
+{
+    public class Enemy
+    {
+        Game1 game;
+
+        public Texture2D spawner_texture;
+        public Texture2D texture;
+        public Texture2D bulletTexture;
+
+        public Vector2 spawner_position;
+        public Vector2 position;
+        public Vector2 origin;
+        public Rectangle enemyRectangle;
+        public Color alienColor;
+        public List<Bullet> enemyBullets = new List<Bullet>();
+
+        public float rotation;
+        public bool isVisible = true;
+        public float speed;
+        public int health;
+        int timer = 0;
+
+        public Enemy(Texture2D enemyTexture, Texture2D spawnerTexture, Texture2D BulletTexture, Vector2 spawnerPos, Color AlienColor, Game1 Game)
+        {
+            spawner_texture = spawnerTexture;
+            texture = enemyTexture;
+            bulletTexture = BulletTexture;
+            rotation = 0;
+            spawner_position = spawnerPos;
+            position = spawner_position;
+            origin = new Vector2(texture.Bounds.Width / 2, texture.Bounds.Height / 2);
+            alienColor = AlienColor;
+
+            game = Game;
+
+            if (alienColor == Color.White)
+            {
+                health = 1;
+                speed = 3.0f;
+            }
+            if (alienColor == Color.Blue)
+            {
+                health = 2;
+                speed = 0.5f;
+            }
+            if (alienColor == Color.Red)
+            {
+                health = 50;
+                speed = 0.2f;
+            }
+            if (alienColor == Color.Green)
+            {
+                health = 100;
+                speed = 0.1f;
+            }
+        }
+
+        public void UpdateEnemy(ref Player p)
+        {
+            timer += 1;
+            if (isVisible)
+            {
+                enemyRectangle = 
+                    new Rectangle((int)position.X, (int)position.Y, texture.Bounds.Width, texture.Bounds.Height);
+            }
+            else
+            {
+                enemyRectangle = new Rectangle(-1000, -1000, 1, 1);
+            }
+            
+            Vector2 distance = new Vector2(position.X - p.position.X, position.Y - p.position.Y);
+
+            rotation = (float)Math.Atan2(distance.Y, distance.X);
+
+            if (alienColor == Color.Green)
+            {
+                if (timer % 120 == 0 && enemyRectangle != new Rectangle(-1000, -1000, 1, 1))
+                {
+                    Bullet newBullet = new Bullet(game.Content.Load<Texture2D>("commandoBullet"));
+
+                    newBullet.velocity = new Vector2((float)Math.Cos(rotation),
+                            (float)Math.Sin(rotation)) * -3;
+                    newBullet.position += position + newBullet.velocity * 5.0f;
+
+                    Vector2 distance_2 = new Vector2();
+                    distance_2.X = p.position.X - position.X;
+                    distance_2.X = p.position.Y - position.Y;
+
+                    newBullet.rotation = (float)Math.Atan2(distance_2.Y, distance_2.X);
+                    newBullet.isVisible = true;
+                    if (enemyBullets.Count < 3000)
+                        enemyBullets.Add(newBullet);
+
+                }
+
+                foreach (Bullet b in enemyBullets)
+                {
+                    b.rotation += MathHelper.ToRadians(5);
+                }
+                for (int i = 0; i < enemyBullets.Count; i++)
+                {
+                    if (!enemyBullets[i].isVisible)
+                    {
+                        enemyBullets.RemoveAt(i);
+                        i--;
+                    }
+                }
+            }
+            
+            Vector2 velocity = new Vector2((float)Math.Cos(rotation),
+                (float)Math.Sin(rotation)) * speed;
+
+            position -= velocity;
+        }
+
+        public void Draw(SpriteBatch SB)
+        {
+            SB.Begin();
+
+            SB.Draw(spawner_texture, spawner_position, alienColor);
+
+            foreach (Bullet b in enemyBullets)
+            {
+               // if (Vector2.Distance(position, b.position) < 2000)
+                //{
+                    SB.End();
+                    b.Draw(SB);
+                    SB.Begin();
+               // }
+            }
+
+            if (isVisible && enemyRectangle != new Rectangle(-1000, -1000, 1, 1))
+            {
+                SB.Draw(texture, position, null, alienColor,
+                    rotation, origin, 1.0f, SpriteEffects.None, 0);
+            }
+
+            SB.End();
+        }
+    }
+}

@@ -1,0 +1,289 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Audio;
+
+namespace Commando
+{
+    public enum typesOfBullets
+    {
+        Normal,
+        TripleShot,
+        RapidFire,
+        TripleDamage
+    }
+
+    public class Player
+    {
+
+        public Texture2D texture;
+
+        public Vector2 position;
+        public Vector2 velocity;
+        public Vector2 origin;
+        public Vector2 distance;
+        
+        public Rectangle playerRect;
+
+        typesOfBullets bulletType = typesOfBullets.RapidFire;
+
+        Game1 game;
+
+        public float rotation;
+        float friction = 0.90f;
+        public float velocityFactor = 5.0f;
+        public int bulletTimer = 0;
+        public int lifePoints = 70;
+        public int AmazingBulletCoolDown = 0;
+        int timer = 0;
+        
+        public List<Bullet> bullets = new List<Bullet>();
+
+        
+        
+        public Player(Texture2D playerTex, Game1 Game)
+        {
+            texture = playerTex;
+            game = Game;
+            position = new Vector2(400, 200);
+            origin = new Vector2(texture.Bounds.Width / 2, texture.Bounds.Height / 2);
+        }
+
+        public void Update()
+        {
+            if (position.X < 0 + playerRect.Width / 2)
+                position.X = 0 + playerRect.Width / 2;
+            if (position.Y < 0 + playerRect.Height / 2)
+                position.Y = 0 + playerRect.Height / 2;
+            if (position.X > (game.GraphicsDevice.Viewport.Width - playerRect.Width / 2))
+                position.X = (game.GraphicsDevice.Viewport.Width - playerRect.Width / 2);
+            if (position.Y > (game.GraphicsDevice.Viewport.Height - playerRect.Height / 2))
+                position.Y = (game.GraphicsDevice.Viewport.Height - playerRect.Height / 2);
+            /*
+            if (AmazingBulletCoolDown > 0)
+            {
+                if (AmazingBulletCoolDown <= 50)
+                {
+                    bulletType = typesOfBullets.Normal;
+                }
+                AmazingBulletCoolDown--;
+            }*/
+
+            //arrow key movement code
+            if (Keyboard.GetState().IsKeyDown(Keys.W))
+            {
+                position.Y -= velocityFactor;
+                if (velocity.Y > -4.9f)
+                    velocity.Y -= 0.1f;
+            }
+            if (Keyboard.GetState().IsKeyDown(Keys.S))
+            {
+                position.Y += velocityFactor;
+                if (velocity.Y < 4.9)
+                    velocity.Y += 0.1f;
+            }
+            if (Keyboard.GetState().IsKeyDown(Keys.A))
+            {
+                position.X -= velocityFactor;
+                if (velocity.X > -4.9f)
+                    velocity.X -= 0.1f;
+            }
+            if (Keyboard.GetState().IsKeyDown(Keys.D))
+            {
+                position.X += velocityFactor;
+                if (velocity.X < 4.9)
+                    velocity.X += 0.1f;
+            }
+            if (Keyboard.GetState().IsKeyDown(Keys.NumPad0))
+            {
+                bulletType = typesOfBullets.Normal;
+            }
+            if (Keyboard.GetState().IsKeyDown(Keys.NumPad1))
+            {
+                bulletType = typesOfBullets.RapidFire;
+            }
+            if (Keyboard.GetState().IsKeyDown(Keys.NumPad2))
+            {
+                bulletType = typesOfBullets.TripleShot;
+            }
+            if (Keyboard.GetState().IsKeyDown(Keys.NumPad3))
+            {
+                bulletType = typesOfBullets.TripleDamage;
+            }
+            
+            UpdateBullet();
+
+            playerRect = new Rectangle((int)position.X, (int)position.Y, texture.Bounds.Width, texture.Bounds.Height);
+
+            MouseState mouse = Mouse.GetState();
+
+            distance.X = mouse.X - position.X;
+            distance.Y = mouse.Y - position.Y;
+
+            if (timer > 0)
+                timer--;
+
+            rotation = (float)Math.Atan2(distance.Y, distance.X);
+
+            if (Mouse.GetState().RightButton == ButtonState.Pressed)
+            {
+                velocity = new Vector2((float)Math.Cos(rotation),
+                    (float)Math.Sin(rotation)) * velocityFactor;
+            }
+            else
+                velocity *= friction;
+
+            position += velocity;
+
+            //if clicked, moves. else, slows down
+
+            if (mouse.LeftButton == ButtonState.Pressed)
+                if (bulletTimer == 0)
+                    Shoot();
+
+            if (bulletTimer > 0)
+                bulletTimer--;
+        }
+
+        public void UpdateBullet()
+        {
+            foreach (Bullet b in bullets)
+            {
+                b.position += b.velocity;
+
+                if (Vector2.Distance(position, b.position) > 2000)
+                    b.isVisible = false;
+
+                //removes if  too far away to prevent lagging
+            }
+
+            for (int i = 0; i < bullets.Count; i++)
+            {
+                if (!bullets[i].isVisible)
+                {
+                    bullets.RemoveAt(i);
+                    i--;
+
+                    //if the bullets are invisible, remove them
+                }
+            }
+        }
+
+        public void Shoot()
+        {
+            if (bulletType == typesOfBullets.Normal)
+            {
+                Bullet newBullet = new Bullet(game.Content.Load<Texture2D>("commandoBullet"));
+
+                newBullet.velocity = new Vector2((float)Math.Cos(rotation),
+                        (float)Math.Sin(rotation)) * (3 * velocityFactor);
+                newBullet.position -= position + newBullet.velocity * 5.0f;
+
+                Vector2 distance = new Vector2();
+                distance.X = Mouse.GetState().X - position.X;
+                distance.X = Mouse.GetState().Y - position.Y;
+
+                newBullet.rotation = (float)Math.Atan2(distance.Y, distance.X);
+                newBullet.isVisible = true;
+                if (bullets.Count < 3000)
+                    bullets.Add(newBullet);
+
+                bulletTimer = 30;
+            }
+            if (bulletType == typesOfBullets.RapidFire)
+            {
+                Bullet newBullet = new Bullet(game.Content.Load<Texture2D>("commandoBullet"));
+
+                newBullet.velocity = new Vector2((float)Math.Cos(rotation),
+                        (float)Math.Sin(rotation)) * (3 * velocityFactor);
+                newBullet.position += position + newBullet.velocity;// *5.0f;
+
+                Vector2 distance = new Vector2();
+                distance.X = Mouse.GetState().X - position.X;
+                distance.X = Mouse.GetState().Y - position.Y;
+
+                newBullet.rotation = (float)Math.Atan2(distance.Y, distance.X);
+                newBullet.isVisible = true;
+                if (bullets.Count < 3000)
+                    bullets.Add(newBullet);
+
+                bulletTimer = 1;
+            }
+            if (bulletType == typesOfBullets.TripleDamage)
+            {
+                Bullet newBullet = new Bullet(game.Content.Load<Texture2D>("commandoBullet"));
+
+                newBullet.velocity = new Vector2((float)Math.Cos(rotation),
+                        (float)Math.Sin(rotation)) * (3 * velocityFactor);
+                newBullet.position += position + newBullet.velocity * 5.0f;
+
+                Vector2 distance = new Vector2();
+                distance.X = Mouse.GetState().X - position.X;
+                distance.X = Mouse.GetState().Y - position.Y;
+
+                newBullet.rotation = (float)Math.Atan2(distance.Y, distance.X);
+                newBullet.isVisible = true;
+                if (bullets.Count < 3000)
+                    bullets.Add(newBullet);
+
+                bulletTimer = 10;
+            }
+            if (bulletType == typesOfBullets.TripleShot)
+            {
+                Bullet newBullet = new Bullet(game.Content.Load<Texture2D>("commandoBullet"));
+                Bullet newBullet2 = new Bullet(game.Content.Load<Texture2D>("commandoBullet"));
+                Bullet newBullet3 = new Bullet(game.Content.Load<Texture2D>("commandoBullet"));
+
+                newBullet.velocity = new Vector2((float)Math.Cos(rotation),
+                        (float)Math.Sin(rotation)) * (3 * velocityFactor);
+                newBullet.position += position + velocity * 1.0f;
+
+                newBullet2.velocity = new Vector2((float)Math.Cos(rotation - MathHelper.ToRadians(30)),
+                        (float)Math.Sin(rotation - MathHelper.ToRadians(30))) * (3 * velocityFactor);
+                newBullet2.position += position + velocity * 1.0f;
+
+                newBullet3.velocity = new Vector2((float)Math.Cos(rotation + MathHelper.ToRadians(30)),
+                        (float)Math.Sin(rotation + MathHelper.ToRadians(30))) * (3 * velocityFactor);
+                newBullet3.position += position + velocity * 1.0f;
+
+                Vector2 distance = new Vector2();
+                distance.X = Mouse.GetState().X - position.X;
+                distance.X = Mouse.GetState().Y - position.Y;
+
+                newBullet.rotation = (float)Math.Atan2(distance.Y, distance.X);
+                newBullet2.rotation = (float)Math.Atan2(distance.Y, distance.X) - 30;
+                newBullet3.rotation = (float)Math.Atan2(distance.Y, distance.X) + 30;
+
+                newBullet.isVisible = true;
+                newBullet2.isVisible = true;
+                newBullet3.isVisible = true;
+
+                if (bullets.Count < 3000)
+                {
+                    bullets.Add(newBullet);
+                    bullets.Add(newBullet2);
+                    bullets.Add(newBullet3);
+                }
+
+                bulletTimer = 8;
+            }
+        }
+
+        public void Draw(SpriteBatch SB)
+        {
+            foreach (Bullet b in bullets)
+                b.Draw(SB);
+
+            SB.Begin();
+
+            SB.Draw(texture, position, null, Color.White, 
+                rotation, origin, 1.0f, SpriteEffects.None, 0);
+
+            SB.End();
+        }
+    }
+}

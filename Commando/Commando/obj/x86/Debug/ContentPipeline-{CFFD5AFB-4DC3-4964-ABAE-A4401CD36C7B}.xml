@@ -1,0 +1,165 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<XnaContent xmlns:Pipeline="Microsoft.Xna.Framework.Content.Pipeline">
+  <Asset Type="Pipeline:BuildItemCollection">
+    <Item>
+      <Source>commandoPlayer.png</Source>
+      <Name>commandoPlayer</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="ColorKeyColor">0, 0, 0, 255</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>C:\Users\Viswanath\Desktop\Desktop 7\Desktop 6\Desktop 5\Desktop 4\Desktop 3\Desktop 2\Desktop\Commando\Commando\Commando\Commando\bin\x86\Debug\Content\commandoPlayer.xnb</Output>
+      <Time>2012-08-05T18:20:38-07:00</Time>
+    </Item>
+    <Item>
+      <Source>CrossHairs.png</Source>
+      <Name>CrossHairs</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="ColorKeyColor">0, 0, 0, 255</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>C:\Users\Viswanath\Desktop\Desktop 7\Desktop 6\Desktop 5\Desktop 4\Desktop 3\Desktop 2\Desktop\Commando\Commando\Commando\Commando\bin\x86\Debug\Content\CrossHairs.xnb</Output>
+      <Time>2012-08-03T21:50:22-07:00</Time>
+    </Item>
+    <Item>
+      <Source>commandoEnemySpawner.png</Source>
+      <Name>commandoEnemySpawner</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="ColorKeyColor">0, 0, 0, 255</Data>
+        <Data Key="ColorKeyEnabled">False</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>C:\Users\Viswanath\Desktop\Desktop 7\Desktop 6\Desktop 5\Desktop 4\Desktop 3\Desktop 2\Desktop\Commando\Commando\Commando\Commando\bin\x86\Debug\Content\commandoEnemySpawner.xnb</Output>
+      <Time>2012-08-04T14:02:40-07:00</Time>
+    </Item>
+    <Item>
+      <Source>commandoEnemy.png</Source>
+      <Name>commandoEnemy</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="ColorKeyColor">0, 0, 0, 255</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>C:\Users\Viswanath\Desktop\Desktop 7\Desktop 6\Desktop 5\Desktop 4\Desktop 3\Desktop 2\Desktop\Commando\Commando\Commando\Commando\bin\x86\Debug\Content\commandoEnemy.xnb</Output>
+      <Time>2012-08-19T19:26:12-07:00</Time>
+    </Item>
+    <Item>
+      <Source>back_ground.png</Source>
+      <Name>back_ground</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="ColorKeyColor">0, 0, 0, 255</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>C:\Users\Viswanath\Desktop\Desktop 7\Desktop 6\Desktop 5\Desktop 4\Desktop 3\Desktop 2\Desktop\Commando\Commando\Commando\Commando\bin\x86\Debug\Content\back_ground.xnb</Output>
+      <Time>2012-08-05T18:36:06-07:00</Time>
+    </Item>
+    <Item>
+      <Source>commandoBullet.png</Source>
+      <Name>commandoBullet</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="ColorKeyColor">0, 0, 0, 255</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>C:\Users\Viswanath\Desktop\Desktop 7\Desktop 6\Desktop 5\Desktop 4\Desktop 3\Desktop 2\Desktop\Commando\Commando\Commando\Commando\bin\x86\Debug\Content\commandoBullet.xnb</Output>
+      <Time>2012-08-06T09:09:38-07:00</Time>
+    </Item>
+    <Item>
+      <Source>textures\wedge_p1_diff_v1.tga</Source>
+      <Name>textures\wedge_p1_diff_v1</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\Viswanath\Desktop\Desktop 7\Desktop 6\Desktop 5\Desktop 4\Desktop 3\Desktop 2\Desktop\Commando\Commando\Commando\Commando\bin\x86\Debug\Content\textures\wedge_p1_diff_v1.xnb</Output>
+      <Time>2012-08-06T20:49:26-07:00</Time>
+    </Item>
+    <Item>
+      <Source>commandoSquareBullet.png</Source>
+      <Name>commandoSquareBullet</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\Viswanath\Desktop\Desktop 7\Desktop 6\Desktop 5\Desktop 4\Desktop 3\Desktop 2\Desktop\Commando\Commando\Commando\Commando\bin\x86\Debug\Content\commandoSquareBullet.xnb</Output>
+      <Time>2013-03-15T11:42:50.7285616-07:00</Time>
+    </Item>
+    <Item>
+      <Source>SpriteFont1.spritefont</Source>
+      <Name>SpriteFont1</Name>
+      <Importer>FontDescriptionImporter</Importer>
+      <Processor>FontDescriptionProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\Viswanath\Desktop\Desktop 7\Desktop 6\Desktop 5\Desktop 4\Desktop 3\Desktop 2\Desktop\Commando\Commando\Commando\Commando\bin\x86\Debug\Content\SpriteFont1.xnb</Output>
+      <Time>2012-08-05T20:09:36-07:00</Time>
+    </Item>
+    <Item>
+      <Source>SpriteFont2.spritefont</Source>
+      <Name>SpriteFont2</Name>
+      <Importer>FontDescriptionImporter</Importer>
+      <Processor>FontDescriptionProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\Viswanath\Desktop\Desktop 7\Desktop 6\Desktop 5\Desktop 4\Desktop 3\Desktop 2\Desktop\Commando\Commando\Commando\Commando\bin\x86\Debug\Content\SpriteFont2.xnb</Output>
+      <Time>2012-08-06T09:41:16-07:00</Time>
+    </Item>
+    <Item>
+      <Source>shoot.wav</Source>
+      <Name>shoot</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\Viswanath\Desktop\Desktop 7\Desktop 6\Desktop 5\Desktop 4\Desktop 3\Desktop 2\Desktop\Commando\Commando\Commando\Commando\bin\x86\Debug\Content\shoot.xnb</Output>
+      <Time>2013-03-08T21:33:28.3333068-08:00</Time>
+    </Item>
+    <BuildSuccessful>true</BuildSuccessful>
+    <Settings>
+      <ContentProjectGUID>{CFFD5AFB-4DC3-4964-ABAE-A4401CD36C7B}</ContentProjectGUID>
+      <TargetPlatform>Windows</TargetPlatform>
+      <TargetProfile>Reach</TargetProfile>
+      <BuildConfiguration>Debug</BuildConfiguration>
+      <CompressContent>false</CompressContent>
+      <RootDirectory>C:\Users\Viswanath\Desktop\Desktop 7\Desktop 6\Desktop 5\Desktop 4\Desktop 3\Desktop 2\Desktop\Commando\Commando\Commando\CommandoContent\</RootDirectory>
+      <LoggerRootDirectory>C:\Users\Viswanath\Desktop\Desktop 7\Desktop 6\Desktop 5\Desktop 4\Desktop 3\Desktop 2\Desktop\Commando\Commando\Commando\Commando\</LoggerRootDirectory>
+      <IntermediateDirectory>C:\Users\Viswanath\Desktop\Desktop 7\Desktop 6\Desktop 5\Desktop 4\Desktop 3\Desktop 2\Desktop\Commando\Commando\Commando\Commando\obj\x86\Debug\</IntermediateDirectory>
+      <OutputDirectory>C:\Users\Viswanath\Desktop\Desktop 7\Desktop 6\Desktop 5\Desktop 4\Desktop 3\Desktop 2\Desktop\Commando\Commando\Commando\Commando\bin\x86\Debug\Content\</OutputDirectory>
+    </Settings>
+    <Assemblies>
+      <Assembly>
+        <Key>C:\Program Files (x86)\Microsoft XNA\XNA Game Studio\v4.0\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.XImporter.dll</Key>
+        <Value>2012-09-06T15:52:54-07:00</Value>
+      </Assembly>
+      <Assembly>
+        <Key>C:\Program Files (x86)\Microsoft XNA\XNA Game Studio\v4.0\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.VideoImporters.dll</Key>
+        <Value>2012-09-06T15:52:54-07:00</Value>
+      </Assembly>
+      <Assembly>
+        <Key>C:\Program Files (x86)\Microsoft XNA\XNA Game Studio\v4.0\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.TextureImporter.dll</Key>
+        <Value>2012-09-06T15:52:54-07:00</Value>
+      </Assembly>
+      <Assembly>
+        <Key>C:\Program Files (x86)\Microsoft XNA\XNA Game Studio\v4.0\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.FBXImporter.dll</Key>
+        <Value>2012-09-06T15:52:54-07:00</Value>
+      </Assembly>
+      <Assembly>
+        <Key>C:\Program Files (x86)\Microsoft XNA\XNA Game Studio\v4.0\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.EffectImporter.dll</Key>
+        <Value>2012-09-06T15:52:54-07:00</Value>
+      </Assembly>
+      <Assembly>
+        <Key>C:\Program Files (x86)\Microsoft XNA\XNA Game Studio\v4.0\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.AudioImporters.dll</Key>
+        <Value>2012-09-06T15:52:54-07:00</Value>
+      </Assembly>
+      <Assembly>
+        <Key>C:\WINDOWS\Microsoft.Net\assembly\GAC_32\Microsoft.Xna.Framework.Content.Pipeline\v4.0_4.0.0.0__842cf8be1de50553\Microsoft.Xna.Framework.Content.Pipeline.dll</Key>
+        <Value>2013-11-03T13:22:06.2061738-08:00</Value>
+      </Assembly>
+    </Assemblies>
+  </Asset>
+</XnaContent>
