@@ -1,6 +1,6 @@
 ## What is Commando?
 
-Welcome to my first ever project! Created back in 2011 and uploaded to CodePlex in 2012, Commando is a C# XNA framework game I created that was automatically transferred over to GitHub when CodePlex was shutting down.
+Welcome to my first ever project! Created back in 2011 and uploaded to CodePlex in 2012, Commando is a C# XNA framework game I created that was automatically transferred over to GitHub when CodePlex shut down.
 
 ## What are .cs.txt files?
 
